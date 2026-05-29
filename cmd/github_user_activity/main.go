@@ -7,13 +7,14 @@ import (
 	"log"
 	"net/http"
 
-	"github-activity/api"
+	"github-activity/internal"
+	"github-activity/models"
 )
 
 func main() {
 	client := &http.Client{}
 
-	url := "https://api.github.com/users/nilbuild/events"
+	url := "https://api.github.com/users/w0ndermaker/events"
 
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
@@ -32,34 +33,37 @@ func main() {
 		log.Fatal(err)
 	}
 
-	resp := make([]api.Response, 0)
+	// fmt.Println(string(body))
+
+	resp := make([]models.Response, 0)
 
 	if err = json.Unmarshal(body, &resp); err != nil {
 		fmt.Println(err)
 	}
+
+	internal.ResponseHandle(resp)
 
 	for _, v := range resp {
 		printResponse(v)
 	}
 }
 
-func printResponse(r api.Response) {
+func printResponse(r models.Response) {
 	// fmt.Printf("\nId : %v\n", r.Id)
 	fmt.Printf("Type : %v\n", r.Type)
 	// fmt.Printf("Actor : %v\n", r.Actor)
-	// fmt.Printf("Repo : %v\n", r.Repo)
+	fmt.Printf("Repo : %v\n", r.Repo)
 	// fmt.Printf("Payload: \n")
-	// printPayload(r)
-	fmt.Printf("Payload: %v\n", r.Payload)
+	printPayload(r)
+	//fmt.Printf("Payload: %v\n", r.Payload)
 	// fmt.Printf("Public : %v\n", r.Public)
 	// fmt.Printf("Created_at : %v\n", r.Created_at)
 
 }
 
-func printPayload(r api.Response) {
+func printPayload(r models.Response) {
 	fmt.Printf("\tAction: %v\n", r.Payload.Action)
+	fmt.Printf("\tComment: %v\n", r.Payload.Comment)
+	fmt.Printf("\tRepository_id: %v\n", r.Payload.RepoId)
 	fmt.Printf("\tRef: %v\n", r.Payload.Ref)
-	fmt.Printf("\tPush_id: %v\n", r.Payload.Push_id)
-	fmt.Printf("\tBefore: %v\n", r.Payload.Before)
-	fmt.Printf("\tRepo_id: %v\n", r.Payload.Repo_id)
 }
