@@ -1,7 +1,6 @@
-package models
+package internal
 
 type actor struct {
-	Id            int    `json:"id"`
 	Display_login string `json:"display_login"`
 }
 
@@ -18,17 +17,22 @@ type issue struct {
 	Id int `json:"id"`
 }
 
-type payload struct {
-	Action  string  `json:"action"`
-	Comment comment `json:"comment"`
-	RepoId  int     `json:"repository_id"`
-	PushId  int     `json:"push_id"`
-	Issue   issue   `json:"issue"`
-	Ref     string  `json:"ref"`
-	RefType string  `json:"ref_type"`
+type pullRequest struct {
+	Url string `json:"url"`
 }
 
-type Response struct {
+type payload struct {
+	Action  string      `json:"action"`
+	Comment comment     `json:"comment"`
+	RepoId  int         `json:"repository_id"`
+	PushId  int         `json:"push_id"`
+	Issue   issue       `json:"issue"`
+	Ref     string      `json:"ref"`
+	RefType string      `json:"ref_type"`
+	PullReq pullRequest `json:"pull_request"`
+}
+
+type GithubActivity struct {
 	Id      string  `json:"id"`
 	Type    string  `json:"type"`
 	Actor   actor   `json:"actor"`
